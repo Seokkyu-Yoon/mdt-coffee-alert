@@ -1,0 +1,49 @@
+{
+  "name": "mdt-coffee-alert",
+  "private": true,
+  "version": "0.0.0",
+  "build": {
+    "appId": "com.mdt.coffee-alert",
+    "productName": "coffeeAlert",
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets",
+      "output": "dist_electron"
+    }
+  },
+  "scripts": {
+    "vite:dev": "cross-env NODE_ENV=\"development\" vite",
+    "vite:build": "cross-env NODE_ENV=\"production\" vite build",
+    "electron:dev": "wait-on tcp:23600 && cross-env NODE_ENV=\"development\" electron .",
+    "electron:build": "cross-env NODE_ENV=\"production\" electron-builder",
+    "dev": "concurrently -k \"npm run electron:dev\" \"cross-env BROWSER=none npm run vite:dev\"",
+    "build": "npm run vite:build && npm run electron:build"
+  },
+  "main": "electron",
+  "dependencies": {
+    "vue": "^3.2.25"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.13",
+    "@vitejs/plugin-vue": "^2.3.4",
+    "concurrently": "^7.3.0",
+    "cross-env": "^7.0.3",
+    "electron": "^20.0.3",
+    "electron-builder": "^23.3.3",
+    "vite": "^2.9.15",
+    "wait-on": "^6.0.1"
+  }
+}
