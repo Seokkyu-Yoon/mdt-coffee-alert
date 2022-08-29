@@ -5,19 +5,23 @@ const { BrowserWindow } = require('electron')
 const isDev = process.env.NODE_ENV === 'development'
 
 let window = null;
+let savedPosition = { x: undefined, y: undefined }
 class MainWindow extends BrowserWindow {
   constructor() {
     if (window) return window
     super({
-      width: 800,
-      height: 600,
+      width: 300,
+      height: 200,
+      x: savedPosition.x,
+      y: savedPosition.y,
+      transparent: true,
       resizable: false,
       frame: false,
       moveable: false,
       webPreferences: {
         preload: path.join(__dirname, 'preload.js'),
         nodeIntegration: true
-      }
+      },
     })
 
     if (isDev) {
@@ -30,8 +34,14 @@ class MainWindow extends BrowserWindow {
     this.on('close', () => {
       window = null
     })
-
+    this.setPosition.apply(this, this.getPosition())
     window = this
+  }
+
+  setPosition(x, y) {
+    super.setPosition(x, y)
+    savedPosition.x = x
+    savedPosition.y = y
   }
 }
 

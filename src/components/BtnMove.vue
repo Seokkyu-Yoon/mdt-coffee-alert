@@ -4,15 +4,11 @@ import { ref, onMounted } from 'vue'
 const moving = ref(false)
 const clientX = ref(null)
 const clientY = ref(null)
-const dX = ref(null)
-const dY = ref(null)
 
 function startMoving (e) {
   moving.value = true
   clientX.value = e.clientX
   clientY.value = e.clientY
-  dX.value = null
-  dY.value = null
 }
 function stopMoving () {
   moving.value = false
@@ -22,27 +18,10 @@ function stopMoving () {
 
 function onMove(e) {
   if (!moving.value) return
-  const cb = send()
-  cb(e.clientX, e.clientY)
-}
-
-function send () {
-  let timer = null
-  let lastClientX = null
-  let lastClientY = null
-  return function (x, y) {
-    lastClientX = x
-    lastClientY = y
-    if (!timer) {
-      timer = setTimeout(() => {
-        const dx = lastClientX - clientX.value
-        const dy = lastClientY - clientY.value
-        clientX.value = lastClientX
-        clientY.value = lastClientY
-        window.ipc.send('winState:move', { dx, dy })
-      }, 300)
-    }
-  }
+  window?.ipc?.send?.('winState:move', {
+    clientX: clientX.value,
+    clientY: clientY.value,
+  })
 }
 
 onMounted(() => {
