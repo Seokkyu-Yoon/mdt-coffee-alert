@@ -20,11 +20,10 @@ app.whenReady().then(() => {
     const { x: sx, y: sy } = screen?.getCursorScreenPoint?.() || {}
 
     if (!mainWindow) return
-    const [wx, wy] = mainWindow.getPosition()
 
     const { clientX, clientY } = payload || {}
-    const x = (sx || wx) - clientX
-    const y = (sy || wy) - clientY
+    const x = sx - clientX
+    const y = sy - clientY
     mainWindow.setPosition(x, y)
   })
 

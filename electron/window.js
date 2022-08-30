@@ -15,8 +15,10 @@ class MainWindow extends BrowserWindow {
       x: savedPosition.x,
       y: savedPosition.y,
       transparent: true,
-      resizable: false,
       frame: false,
+      minimizable: false,
+      maximizable: false,
+      resizable: false,
       moveable: false,
       webPreferences: {
         preload: path.join(__dirname, 'preload.js'),
