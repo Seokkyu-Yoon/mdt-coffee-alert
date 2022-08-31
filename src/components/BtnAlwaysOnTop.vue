@@ -28,6 +28,7 @@ button {
   cursor: pointer;
 }
 button.activate {
-  background-color: #38f;
+  background-color: #ff3;
+  color: #333;
 }
 </style>
