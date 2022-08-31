@@ -10,8 +10,6 @@ class MainWindow extends BrowserWindow {
   constructor() {
     if (window) return window
     super({
-      width: 300,
-      height: 200,
       x: savedPosition.x,
       y: savedPosition.y,
       transparent: true,

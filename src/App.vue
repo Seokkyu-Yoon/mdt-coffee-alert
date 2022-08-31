@@ -1,11 +1,16 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 
 import BtnAlwaysOnTop from '@/components/BtnAlwaysOnTop.vue'
 import BtnMove from '@/components/BtnMove.vue'
 import BtnClose from '@/components/BtnClose.vue'
+import BtnMembers from '@/components/BtnMembers.vue'
+
+import MainContent from '@/components/MainContent.vue'
+import CoffeeMembers from '@/components/CoffeeMembers.vue'
 
 const dateCurrent = ref(null)
+const bodyClientHeight = computed(() => window?.document?.body?.clientHeight || null)
 const dateFrom = computed(() => {
   if (!dateCurrent.value) return null
   const dayCurr = dateCurrent.value?.getDay()
@@ -16,13 +21,8 @@ const dateTo = computed(() => {
   return new Date(dateFrom.value?.getFullYear(), dateFrom.value?.getMonth(), dateFrom.value?.getDate() + 4)
 })
 
-function getYYYYMMDD (date = new Date()) {
-  if (!date) return ''
-  const years = String(date.getFullYear()).padStart(4, '0')
-  const months = String(date.getMonth() + 1).padStart(2, '0')
-  const dates = String(date.getDate()).padStart(2, '0')
-  return `${years}년 ${months}월 ${dates}일`
-}
+const refMembers = ref(null)
+
 function refresh() {
   const now = new Date()
   const tomarrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0)
@@ -34,34 +34,33 @@ function refresh() {
 
 onMounted(() => {
   refresh()
+  window?.ipc?.send?.('winState:resize', {
+    height: 93,
+    width: 270
+  })
 })
 </script>
 
 <template>
   <header>
+    <btn-members :refMembers="refMembers"/>
     <btn-always-on-top/>
     <btn-move/>
     <btn-close/>
   </header>
   <body>
-    <span>
-      {{getYYYYMMDD(dateFrom)}} ~ {{getYYYYMMDD(dateTo)}}
-    </span>
+    <main-content/>
+    <coffee-members ref="refMembers"/>
   </body>
 </template>
 
 <style>
-html {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  color: #fff;
-}
 
 body {
   position: relative;
-  flex: 1;
   margin: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: #fff;
 }
 </style>
 
@@ -74,10 +73,5 @@ header {
 }
 header > *:nth-child(n+2) {
   margin-left: 2px;
-}
-body {
-  border-radius: 3px;
-  padding: 10px;
-  background-color: rgba(0, 0, 0, 0.3);
 }
 </style>

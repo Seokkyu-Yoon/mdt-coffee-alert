@@ -33,6 +33,9 @@ app.whenReady().then(() => {
   ipcMain.on('winState:alwaysOnTop', (e, payload) => {
     mainWindow.setAlwaysOnTop(payload)
   })
+  ipcMain.on('winState:resize', (e, payload) => {
+    mainWindow.setBounds(payload)
+  })
 })
 
 app.on('window-all-closed', (e) => {
